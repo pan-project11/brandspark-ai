@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrandSpark AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:#D4447A; --rose-l:#FCE4ED; --rose-m:#F0A0C0;
+  --plum:#6B3060; --plum-l:#E8D8F0;
+  --mauve:#9B6A8A; --blush:#FDF0F6; --cream:#FEF8FB;
+  --text:#1E0F1A; --text-m:#5A304A; --text-s:#9A6080;
+  --border:#EAD0E0; --white:#FFFFFF;
+  --ok:#3DAA6A; --shadow:0 4px 24px rgba(180,80,120,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--rose),var(--plum));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-family:'Playfair Display',serif;font-weight:800}
+.brand-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--text)}
+.brand-name span{color:var(--rose)}
+.nav-sub{font-size:12px;color:var(--text-s);font-style:italic}
+
+/* HERO */
+.hero{text-align:center;padding:2.5rem 1rem 1.5rem}
+.hero-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:.8rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(26px,4.5vw,52px);font-weight:800;line-height:1.15;margin-bottom:.7rem;color:var(--text)}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero p{font-size:16px;color:var(--text-m);max-width:480px;margin:0 auto;line-height:1.65}
+
+/* FORM CARD */
+.wrap{max-width:880px;margin:0 auto;padding:0 1rem}
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:2rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.fl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-s);margin-bottom:7px;display:block}
+
+textarea{width:100%;min-height:88px;border:1.5px solid var(--border);border-radius:14px;padding:13px 15px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--blush);resize:vertical;outline:none;transition:border .2s,background .2s;line-height:1.6}
+textarea:focus{border-color:var(--rose);background:var(--white)}
+textarea::placeholder{color:var(--text-s)}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.opt{display:flex;flex-direction:column;gap:6px}
+
+select{width:100%;height:44px;border:1.5px solid var(--border);border-radius:12px;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--blush);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%239B6A8A' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;cursor:pointer;outline:none;transition:border .2s}
+select:focus{border-color:var(--rose)}
+
+/* Color pickers */
+.color-row{display:flex;gap:10px}
+.cpick{display:flex;align-items:center;gap:7px;flex:1;background:var(--blush);border:1.5px solid var(--border);border-radius:12px;padding:7px 12px}
+.cpick label{font-size:12px;color:var(--text-s);flex:1}
+input[type=color]{width:30px;height:30px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0}
+.cpick span{font-size:11px;color:var(--text-s);font-family:monospace}
+
+/* Theme pills */
+.theme-wrap{margin-top:14px}
+.theme-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.tp{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--text-m);cursor:pointer;transition:all .2s;white-space:nowrap;user-select:none}
+.tp:hover{border-color:var(--rose-m);color:var(--rose)}
+.tp.on{background:var(--rose-l);border-color:var(--rose);color:var(--rose)}
+
+/* Upload */
+.upload-wrap{margin-top:14px}
+.upload-zone{border:2px dashed var(--border);border-radius:14px;padding:18px;text-align:center;cursor:pointer;transition:border .2s;background:var(--blush);position:relative}
+.upload-zone:hover{border-color:var(--rose-m)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone p{font-size:13px;color:var(--text-s);pointer-events:none}
+.upload-zone strong{color:var(--rose)}
+.previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.prev-wrap{position:relative}
+.prev-img{width:68px;height:68px;border-radius:10px;object-fit:cover;border:2px solid var(--border)}
+.prev-rm{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--rose);color:#fff;font-size:11px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1}
+
+/* URL input */
+.url-row{display:flex;gap:8px;margin-top:8px}
+.url-row input[type=text]{flex:1;height:40px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--blush);outline:none;transition:border .2s}
+.url-row input[type=text]:focus{border-color:var(--rose);background:var(--white)}
+.url-row input::placeholder{color:var(--text-s)}
+.url-add-btn{height:40px;padding:0 16px;background:var(--plum-l);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--plum);cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;white-space:nowrap}
+.url-add-btn:hover{background:var(--rose-l);border-color:var(--rose-m);color:var(--rose)}
+
+/* Gen button */
+.gen-btn{width:100%;height:52px;background:linear-gradient(135deg,var(--rose),var(--plum));color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;letter-spacing:.01em}
+.gen-btn:hover{opacity:.91}
+.gen-btn:active{transform:scale(.98)}
+.gen-btn:disabled{opacity:.45;cursor:not-allowed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+
+/* PROGRESS */
+.prog-wrap{max-width:880px;margin:0 auto 1.5rem;display:none}
+.prog-steps{display:flex;gap:8px;flex-wrap:wrap}
+.sp{display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;background:var(--white);border:1px solid var(--border);color:var(--text-s);transition:all .3s}
+.sp.active{background:var(--rose-l);border-color:var(--rose-m);color:var(--rose)}
+.sp.done{background:#EAF7F0;border-color:#90D4B0;color:var(--ok)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.blink{animation:blink 1s infinite}
+
+/* RESULTS */
+.results{max-width:880px;margin:0 auto;display:none}
+.sec-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-s);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:up .4s ease}
+
+/* STRATEGY */
+.strat-hero{background:linear-gradient(135deg,var(--plum-l),var(--rose-l));border:1px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:.8rem}
+.strat-hero h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--plum);margin-bottom:.4rem}
+.strat-hero p{font-size:14px;color:var(--text-m);line-height:1.65}
+.strat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.8rem}
+.sc{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.sc h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mauve);margin-bottom:8px}
+.sc p,.sc li{font-size:13px;color:var(--text-m);line-height:1.6}
+.sc ul{padding-left:1rem}
+.sc li{margin-bottom:3px}
+.sc-full{grid-column:1/-1}
+.ch-list{display:flex;flex-direction:column;gap:7px}
+.ch-item{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.ch-name{color:var(--text);font-weight:500}
+.ch-why{font-size:11px;color:var(--text-s);flex:1;margin:0 8px}
+.pri{padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700}
+.pri-High{background:#EAF7F0;color:#2A8A50}
+.pri-Medium{background:#FFF7E0;color:#B07800}
+.pri-Low{background:var(--rose-l);color:var(--rose)}
+.budget-bars{display:flex;flex-direction:column;gap:7px}
+.bb-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.bb-label{width:110px;color:var(--text-m)}
+.bb-track{flex:1;background:var(--blush);border-radius:4px;height:7px;overflow:hidden}
+.bb-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--mauve));border-radius:4px}
+.bb-pct{width:28px;text-align:right;font-weight:700;color:var(--text)}
+.kpi-g{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.kpi-item{background:var(--blush);border-radius:10px;padding:8px 10px}
+.kpi-m{font-size:11px;color:var(--text-s);margin-bottom:2px}
+.kpi-v{font-size:14px;font-weight:700;color:var(--plum)}
+.funnel-steps{display:flex;flex-direction:column;gap:6px}
+.funnel-step{display:flex;gap:10px;align-items:flex-start}
+.f-badge{min-width:80px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;text-align:center}
+.f-awareness{background:#E8F4FD;color:#1565C0}
+.f-consideration{background:#F3E8FD;color:#6A1B9A}
+.f-conversion{background:#EAF7F0;color:#2A8A50}
+.f-retention{background:#FFF7E0;color:#B07800}
+.f-text{font-size:13px;color:var(--text-m);padding-top:2px;line-height:1.5}
+.pain-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500}
+.chip-pain{background:var(--rose-l);color:var(--rose)}
+.chip-mot{background:var(--plum-l);color:var(--plum)}
+
+/* TAGLINE */
+.tagline-card{background:linear-gradient(135deg,var(--rose-l),var(--plum-l));border:1px solid var(--rose-m);border-radius:18px;padding:1.5rem 2rem;margin-bottom:.8rem;text-align:center}
+.tagline-text{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,30px);font-weight:800;color:var(--plum);line-height:1.3}
+
+/* COPY */
+.copy-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:.8rem;box-shadow:var(--shadow)}
+.copy-text{font-size:15px;line-height:1.8;color:var(--text-m)}
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px;margin-bottom:.8rem}
+.hl-item{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--plum);text-align:center;box-shadow:var(--shadow)}
+
+/* IMAGES */
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:.8rem}
+.img-wrap{display:flex;flex-direction:column;gap:7px}
+.img-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:var(--blush);aspect-ratio:1;position:relative}
+.img-card img{width:100%;height:100%;object-fit:cover;display:block}
+.img-ph{width:100%;height:100%;min-height:180px;display:flex;align-items:center;justify-content:center;color:var(--text-s);font-size:24px}
+.img-footer{display:flex;align-items:center;justify-content:space-between}
+.img-label{font-size:12px;color:var(--text-s);font-weight:500}
+.dl-btn{font-size:11px;font-weight:700;color:var(--rose);background:var(--rose-l);border:1px solid var(--rose-m);border-radius:8px;padding:4px 11px;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background .2s}
+.dl-btn:hover{background:var(--rose-m);color:#fff}
+
+/* SCRIPT */
+.script-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:.8rem;box-shadow:var(--shadow)}
+.scene-list{display:flex;flex-direction:column;gap:14px}
+.scene{display:flex;gap:12px}
+.scene-n{width:26px;height:26px;border-radius:50%;background:var(--rose-l);color:var(--rose);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.scene-body{flex:1}
+.scene-vis{font-size:13px;color:var(--text-s);font-style:italic;margin-bottom:5px;line-height:1.5}
+.scene-vo{font-size:14px;font-weight:600;color:var(--text);background:var(--blush);padding:9px 13px;border-radius:10px;border-left:3px solid var(--rose);line-height:1.55}
+.scene-dur{font-size:11px;color:var(--text-s);margin-top:4px}
+
+/* AUDIO */
+.audio-card{background:linear-gradient(135deg,#F5EEFF,#FDF0F6);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.4rem;margin-bottom:.8rem;display:flex;align-items:center;gap:14px}
+.audio-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--plum));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:#fff}
+audio{flex:1;height:36px}
+
+/* SOCIAL */
+.soc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:.8rem}
+.soc-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.soc-card.wide{grid-column:1/-1}
+.plat-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:8px}
+.ig{background:#FDE8F2;color:#B5185A}
+.tw{background:#E6F4FD;color:#1455A4}
+.li{background:#E6EFF8;color:#0B3D8A}
+.soc-text{font-size:13px;line-height:1.65;color:var(--text-m);margin-bottom:10px;white-space:pre-line}
+.cp-btn{font-size:11px;font-weight:700;color:var(--rose);background:var(--rose-l);border:1px solid var(--rose-m);border-radius:7px;padding:4px 11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.cp-btn:hover{background:var(--rose-m);color:#fff}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:7px;padding:1rem 1.25rem;background:var(--white);border:1px solid var(--border);border-radius:14px;margin-bottom:2.5rem;box-shadow:var(--shadow)}
+.tag{background:var(--rose-l);color:var(--rose);border-radius:20px;padding:4px 13px;font-size:13px;font-weight:700}
+
+footer{text-align:center;padding:2rem;font-size:13px;color:var(--text-s);border-top:1px solid var(--border);margin-top:1rem}
+
+@media(max-width:620px){
+  .g2,.g3,.strat-grid,.img-grid,.soc-grid,.kpi-g{grid-template-columns:1fr}
+  .sc-full{grid-column:1}
+  .soc-card.wide{grid-column:1}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-mark">B</div>
+    <div class="brand-name">BrandSpark <span>AI</span></div>
+  </div>
+  <span class="nav-sub">AI Campaign Studio</span>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-eyebrow">✦ AI-Powered Marketing</div>
+    <h1>From idea to<br><em>full campaign</em> in seconds</h1>
+    <p>Strategy, copy, visuals, video script, voiceover & social posts — all generated instantly.</p>
+  </div>
+
+  <div class="form-card">
+
+    <!-- Description -->
+    <label class="fl" for="desc">Describe your product or service</label>
+    <textarea id="desc" placeholder="e.g. A luxurious pregnancy gift box with 12 essentials — belly butter, journal, herbal teas, compression socks, and more. Perfect gift for expecting mothers in their 1st to 3rd trimester..."></textarea>
+
+    <!-- Language + Image Size -->
+    <div class="g2">
+      <div class="opt">
+        <label class="fl">Output Language</label>
+        <select id="lang">
+          <option value="English">🌐 English</option>
+          <option value="Bahasa Melayu">🇲🇾 Bahasa Melayu</option>
+          <option value="Mandarin Chinese">🇨🇳 中文 (Mandarin)</option>
+          <option value="Hindi">🇮🇳 हिन्दी (Hindi)</option>
+          <option value="French">🇫🇷 Français</option>
+          <option value="Spanish">🇪🇸 Español</option>
+          <option value="Arabic">🇸🇦 العربية</option>
+          <option value="Russian">🇷🇺 Русский</option>
+          <option value="Japanese">🇯🇵 日本語</option>
+          <option value="Korean">🇰🇷 한국어</option>
+          <option value="Portuguese">🇧🇷 Português</option>
+          <option value="German">🇩🇪 Deutsch</option>
+          <option value="Italian">🇮🇹 Italiano</option>
+          <option value="Thai">🇹🇭 ภาษาไทย</option>
+          <option value="Indonesian">🇮🇩 Bahasa Indonesia</option>
+        </select>
+      </div>
+      <div class="opt">
+        <label class="fl">Image Format</label>
+        <select id="imgSize">
+          <option value="1:1">⬛ Square 1:1 — Instagram Feed</option>
+          <option value="9:16">📱 Story 9:16 — Reels / TikTok</option>
+          <option value="16:9">🖥 Landscape 16:9 — YouTube / Banner</option>
+          <option value="4:5">📸 Portrait 4:5 — Instagram Portrait</option>
+          <option value="3:4">🖼 Portrait 3:4 — Facebook</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Brand Colors -->
+    <div class="opt" style="margin-top:14px">
+      <label class="fl">Brand Colors (optional)</label>
+      <div class="color-row">
+        <div class="cpick">
+          <label>Primary</label>
+          <input type="color" id="c1" value="#D4447A" oninput="document.getElementById('c1h').textContent=this.value">
+          <span id="c1h">#D4447A</span>
+        </div>
+        <div class="cpick">
+          <label>Secondary</label>
+          <input type="color" id="c2" value="#6B3060" oninput="document.getElementById('c2h').textContent=this.value">
+          <span id="c2h">#6B3060</span>
+        </div>
+        <div class="cpick">
+          <label>Accent</label>
+          <input type="color" id="c3" value="#F0A0C0" oninput="document.getElementById('c3h').textContent=this.value">
+          <span id="c3h">#F0A0C0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal Themes -->
+    <div class="theme-wrap">
+      <label class="fl">Seasonal / Campaign Theme (optional)</label>
+      <div class="theme-pills" id="themePills">
+        <div class="tp on" data-theme="" onclick="pickTheme(this)">No theme</div>
+        <div class="tp" data-theme="Christmas" onclick="pickTheme(this)">🎄 Christmas</div>
+        <div class="tp" data-theme="Hari Raya" onclick="pickTheme(this)">🌙 Hari Raya</div>
+        <div class="tp" data-theme="Chinese New Year" onclick="pickTheme(this)">🏮 Chinese New Year</div>
+        <div class="tp" data-theme="Diwali" onclick="pickTheme(this)">✨ Diwali</div>
+        <div class="tp" data-theme="Holi" onclick="pickTheme(this)">🎨 Holi</div>
+        <div class="tp" data-theme="Ramadan" onclick="pickTheme(this)">☪️ Ramadan</div>
+        <div class="tp" data-theme="Black Friday" onclick="pickTheme(this)">🖤 Black Friday</div>
+        <div class="tp" data-theme="Valentine's Day" onclick="pickTheme(this)">💝 Valentine's Day</div>
+        <div class="tp" data-theme="Mother's Day" onclick="pickTheme(this)">🌸 Mother's Day</div>
+        <div class="tp" data-theme="Halloween" onclick="pickTheme(this)">🎃 Halloween</div>
+        <div class="tp" data-theme="Thanksgiving" onclick="pickTheme(this)">🍂 Thanksgiving</div>
+        <div class="tp" data-theme="New Year" onclick="pickTheme(this)">🎆 New Year</div>
+      </div>
+    </div>
+
+    <!-- Product Images -->
+    <div class="upload-wrap">
+      <label class="fl">Product Images (optional — upload or paste URL)</label>
+      <div class="upload-zone" id="dropZone">
+        <input type="file" id="fileIn" accept="image/*" multiple onchange="handleFiles(this.files)">
+        <p>📎 <strong>Click to upload</strong> or drag &amp; drop your product images<br><span style="font-size:11px">JPG, PNG, WEBP — up to 3 images</span></p>
+      </div>
+      <div class="url-row">
+        <input type="text" id="imgUrl" placeholder="Or paste an image URL (https://...)">
+        <button class="url-add-btn" onclick="addImageUrl()">+ Add URL</button>
+      </div>
+      <div class="previews" id="previews"></div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="generate()">
+      <div class="spin" id="spin"></div>
+      <span id="btnLbl">✦ Generate Full Campaign</span>
+    </button>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-steps">
+      <div class="sp" id="sp-thinking"><div class="dot"></div>Starting</div>
+      <div class="sp" id="sp-analyzing"><div class="dot"></div>Analyzing images</div>
+      <div class="sp" id="sp-strategy_done"><div class="dot"></div>Strategy</div>
+      <div class="sp" id="sp-copy_done"><div class="dot"></div>Copy</div>
+      <div class="sp" id="sp-images_done"><div class="dot"></div>Visuals</div>
+      <div class="sp" id="sp-video_done"><div class="dot"></div>Voiceover</div>
+      <div class="sp" id="sp-social_done"><div class="dot"></div>Social</div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <!-- Strategy -->
+    <div id="secStrategy" style="display:none" class="fi">
+      <p class="sec-title">Marketing Strategy</p>
+      <div id="strategyContent"></div>
+    </div>
+
+    <!-- Tagline -->
+    <div id="secTagline" style="display:none" class="fi">
+      <p class="sec-title">Campaign Tagline</p>
+      <div class="tagline-card"><div class="tagline-text" id="taglineText"></div></div>
+    </div>
+
+    <!-- Hero Copy -->
+    <div id="secCopy" style="display:none" class="fi">
+      <p class="sec-title">Hero Copy</p>
+      <div class="copy-card"><p class="copy-text" id="copyText"></p></div>
+    </div>
+
+    <!-- Headlines -->
+    <div id="secHeadlines" style="display:none" class="fi">
+      <p class="sec-title">Ad Headlines</p>
+      <div class="hl-grid" id="hlGrid"></div>
+    </div>
+
+    <!-- Images -->
+    <div id="secImages" style="display:none" class="fi">
+      <p class="sec-title">Campaign Visuals</p>
+      <div class="img-grid">
+        <div class="img-wrap">
+          <div class="img-card" id="img1"><div class="img-ph">✦</div></div>
+          <div class="img-footer">
+            <span class="img-label">Hero Image</span>
+            <a class="dl-btn" id="dl1" style="display:none" download="hero-image.png">⬇ Download</a>
+          </div>
+        </div>
+        <div class="img-wrap">
+          <div class="img-card" id="img2"><div class="img-ph">✦</div></div>
+          <div class="img-footer">
+            <span class="img-label">Social Image</span>
+            <a class="dl-btn" id="dl2" style="display:none" download="social-image.png">⬇ Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script -->
+    <div id="secScript" style="display:none" class="fi">
+      <p class="sec-title">Video Ad Script</p>
+      <div class="script-card"><div class="scene-list" id="sceneList"></div></div>
+    </div>
+
+    <!-- Voiceover -->
+    <div id="secAudio" style="display:none" class="fi">
+      <p class="sec-title">Voiceover Audio</p>
+      <div class="audio-card">
+        <div class="audio-icon">🎙</div>
+        <audio id="player" controls></audio>
+      </div>
+    </div>
+
+    <!-- Social Posts -->
+    <div id="secSocial" style="display:none" class="fi">
+      <p class="sec-title">Social Media Posts</p>
+      <div class="soc-grid" id="socGrid"></div>
+    </div>
+
+    <!-- Hashtags -->
+    <div id="secTags" style="display:none" class="fi">
+      <p class="sec-title">Hashtags</p>
+      <div class="tags-wrap" id="tagsWrap"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>PitchForge &mdash; AI Campaign Studio &copy; 2025</footer>
+
+<script>
+const API = 'https://pitchforge-backend-632605595642.us-central1.run.app';
+let selectedTheme = ''
+let productImages = []; // {type:'file'|'url', data:base64|url, name:str}
+
+// Theme picker
+function pickTheme(el) {
+  document.querySelectorAll('.tp').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  selectedTheme = el.dataset.theme;
+}
+
+// File upload
+function handleFiles(files) {
+  Array.from(files).slice(0, 3 - productImages.length).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      productImages.push({type:'file', data: e.target.result, name: f.name});
+      renderPreviews();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+// URL add
+function addImageUrl() {
+  const url = document.getElementById('imgUrl').value.trim();
+  if (!url || !url.startsWith('http')) return;
+  if (productImages.length >= 3) return;
+  productImages.push({type:'url', data: url, name: url});
+  document.getElementById('imgUrl').value = '';
+  renderPreviews();
+}
+
+function removeImage(i) {
+  productImages.splice(i, 1);
+  renderPreviews();
+}
+
+function renderPreviews() {
+  const wrap = document.getElementById('previews');
+  wrap.innerHTML = '';
+  productImages.forEach((img, i) => {
+    const src = img.data;
+    wrap.innerHTML += `<div class="prev-wrap"><img class="prev-img" src="${src}" alt="product"><button class="prev-rm" onclick="removeImage(${i})">✕</button></div>`;
+  });
+}
+
+// Drag and drop
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor='var(--rose)'; });
+dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor=''; });
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.style.borderColor=''; handleFiles(e.dataTransfer.files); });
+
+// Step pills
+function setStep(id, state) {
+  const el = document.getElementById('sp-' + id);
+  if (!el) return;
+  el.className = 'sp ' + state;
+  const d = el.querySelector('.dot');
+  state === 'active' ? d.classList.add('blink') : d.classList.remove('blink');
+}
+
+function show(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.display = 'block'; el.classList.add('fi'); }
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const o = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = o, 2000);
+  });
+}
+
+async function downloadImage(url, filename) {
+  try {
+    const resp = await fetch(url);
+    const blob = await resp.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+  } catch(e) {
+    window.open(url, '_blank');
+  }
+}
+
+// Main generate
+async function generate() {
+  const desc = document.getElementById('desc').value.trim();
+  if (desc.length < 10) {
+    document.getElementById('desc').style.borderColor = 'var(--rose)';
+    document.getElementById('desc').focus();
+    return;
+  }
+  document.getElementById('desc').style.borderColor = '';
+
+  const btn = document.getElementById('genBtn');
+  const spin = document.getElementById('spin');
+  const lbl = document.getElementById('btnLbl');
+  btn.disabled = true;
+  spin.style.display = 'block';
+  lbl.textContent = 'Crafting your campaign...';
+
+  document.getElementById('progWrap').style.display = 'block';
+  document.getElementById('results').style.display = 'block';
+  ['secStrategy','secTagline','secCopy','secHeadlines','secImages','secScript','secAudio','secSocial','secTags'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  document.getElementById('img1').innerHTML = '<div class="img-ph">✦</div>';
+  document.getElementById('img2').innerHTML = '<div class="img-ph">✦</div>';
+  document.getElementById('dl1').style.display = 'none';
+  document.getElementById('dl2').style.display = 'none';
+
+  ['thinking','analyzing','strategy_done','copy_done','images_done','video_done','social_done'].forEach(s => setStep(s, ''));
+  setStep('thinking', 'active');
+
+  // Build colors string
+  const c1 = document.getElementById('c1').value;
+  const c2 = document.getElementById('c2').value;
+  const c3 = document.getElementById('c3').value;
+  const brandColors = `${c1}, ${c2}, ${c3}`;
+
+  // Prepare product images (base64 or url)
+  const imgPayload = productImages.map(img => img.data);
+
+  try {
+    const resp = await fetch(`${API}/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        description: desc,
+        language: document.getElementById('lang').value,
+        theme: selectedTheme,
+        brand_colors: brandColors,
+        image_size: document.getElementById('imgSize').value,
+        product_images: imgPayload
+      })
+    });
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try { handleEvent(JSON.parse(line.slice(6))); } catch(e) {}
+      }
+    }
+  } catch(err) { console.error(err); }
+
+  btn.disabled = false;
+  spin.style.display = 'none';
+  lbl.textContent = '✦ Generate Full Campaign';
+}
+
+function handleEvent(e) {
+  const { type, key, content } = e;
+
+  if (type === 'status') {
+    const stepMap = {
+      'thinking': [['thinking','active']],
+      'analyzing': [['thinking','done'],['analyzing','active']],
+      'strategy_done': [['analyzing','done'],['strategy_done','done'],['copy_done','active']],
+      'copy_done': [['copy_done','done'],['images_done','active']],
+      'images_done': [['images_done','done'],['video_done','active']],
+      'video_done': [['video_done','done'],['social_done','active']],
+      'social_done': [['social_done','done']]
+    };
+    (stepMap[key] || []).forEach(([id, state]) => setStep(id, state));
+    return;
+  }
+
+  if (type === 'json' && key === 'strategy' && content) {
+    renderStrategy(content);
+    show('secStrategy');
+  }
+
+  if (type === 'text' && key === 'tagline' && content) {
+    document.getElementById('taglineText').textContent = content;
+    show('secTagline');
+  }
+
+  if (type === 'text' && key === 'hero_copy' && content) {
+    document.getElementById('copyText').textContent = content;
+    show('secCopy');
+  }
+
+  if (type === 'text' && key === 'headlines' && content?.length) {
+    const g = document.getElementById('hlGrid');
+    g.innerHTML = content.map(h => `<div class="hl-item">${h}</div>`).join('');
+    show('secHeadlines');
+  }
+
+  if (type === 'image' && key === 'hero_image' && content) {
+    document.getElementById('img1').innerHTML = `<img src="${content}" alt="Hero">`;
+    const dl = document.getElementById('dl1');
+    dl.href = content;
+    dl.onclick = (e) => { e.preventDefault(); downloadImage(content, 'hero-image.png'); };
+    dl.style.display = 'inline-flex';
+    show('secImages');
+  }
+
+  if (type === 'image' && key === 'social_image' && content) {
+    document.getElementById('img2').innerHTML = `<img src="${content}" alt="Social">`;
+    const dl = document.getElementById('dl2');
+    dl.href = content;
+    dl.onclick = (e) => { e.preventDefault(); downloadImage(content, 'social-image.png'); };
+    dl.style.display = 'inline-flex';
+    show('secImages');
+  }
+
+  if (type === 'text' && key === 'script' && content?.scenes) {
+    const list = document.getElementById('sceneList');
+    list.innerHTML = content.scenes.map((s, i) => `
+      <div class="scene">
+        <div class="scene-n">${i+1}</div>
+        <div class="scene-body">
+          <div class="scene-vis">${s.scene}</div>
+          <div class="scene-vo">"${s.vo}"</div>
+          <div class="scene-dur">${s.duration}s</div>
+        </div>
+      </div>`).join('');
+    show('secScript');
+  }
+
+  if (type === 'audio' && key === 'voiceover' && content) {
+    document.getElementById('player').src = content;
+    show('secAudio');
+  }
+
+  if (type === 'text' && key === 'social' && content) {
+    const g = document.getElementById('socGrid');
+    g.innerHTML = '';
+    [
+      { id:'instagram', label:'Instagram', cls:'ig', icon:'📸' },
+      { id:'twitter', label:'X (Twitter)', cls:'tw', icon:'✦' },
+      { id:'linkedin', label:'LinkedIn', cls:'li', icon:'💼', wide:true }
+    ].forEach(p => {
+      const txt = content[p.id];
+      if (!txt) return;
+      const d = document.createElement('div');
+      d.className = 'soc-card' + (p.wide ? ' wide' : '');
+      const escaped = txt.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      d.innerHTML = `<span class="plat-badge ${p.cls}">${p.icon} ${p.label}</span>
+        <p class="soc-text">${txt}</p>
+        <button class="cp-btn" onclick="copyText('${escaped}',this)">Copy</button>`;
+      g.appendChild(d);
+    });
+    show('secSocial');
+
+    if (content.hashtags?.length) {
+      document.getElementById('tagsWrap').innerHTML = content.hashtags.map(h => `<span class="tag">#${h}</span>`).join('');
+      show('secTags');
+    }
+  }
+
+  if (type === 'error') console.error('Error:', content);
+}
+
+function renderStrategy(s) {
+  const pu = s.product_understanding || {};
+  const ta = s.target_audience || {};
+  const mp = s.market_positioning || {};
+  const ct = s.campaign_theme || {};
+  const mf = s.marketing_funnel || {};
+  const ch = s.recommended_channels || [];
+  const bs = s.budget_split || [];
+  const kpis = s.kpis || [];
+
+  const painChips = (ta.pain_points || []).map(p => `<span class="chip chip-pain">${p}</span>`).join('');
+  const motChips = (ta.motivations || []).map(m => `<span class="chip chip-mot">${m}</span>`).join('');
+  const diffs = (mp.differentiators || []).map(d => `<li>${d}</li>`).join('');
+  const channelRows = ch.map(c => `
+    <div class="ch-item">
+      <span class="ch-name">${c.channel}</span>
+      <span class="ch-why">${c.reason || ''}</span>
+      <span class="pri pri-${c.priority}">${c.priority}</span>
+    </div>`).join('');
+  const budgetBars = bs.map(b => `
+    <div class="bb-row">
+      <span class="bb-label">${b.category}</span>
+      <div class="bb-track"><div class="bb-fill" style="width:${b.percentage}%"></div></div>
+      <span class="bb-pct">${b.percentage}%</span>
+    </div>`).join('');
+  const kpiCards = kpis.map(k => `
+    <div class="kpi-item">
+      <div class="kpi-m">${k.metric}</div>
+      <div class="kpi-v">${k.target}</div>
+    </div>`).join('');
+
+  document.getElementById('strategyContent').innerHTML = `
+    <div class="strat-hero">
+      <h3>${ct.campaign_name || 'Campaign Strategy'}</h3>
+      <p style="font-style:italic;font-size:15px;font-weight:600;color:var(--plum);margin-bottom:.5rem">"${ct.big_idea || ''}"</p>
+      <p>${ct.creative_direction || ''}</p>
+      ${mp.statement ? `<p style="margin-top:.6rem;font-size:13px;color:var(--text-s)">Positioning: ${mp.statement}</p>` : ''}
+    </div>
+
+    <div class="strat-grid">
+      <div class="sc">
+        <h4>Product Understanding</h4>
+        <p><strong>Core benefit:</strong> ${pu.core_benefit || ''}</p>
+        <p><strong>Emotional hook:</strong> ${pu.emotional_hook || ''}</p>
+        <p><strong>Positioning:</strong> ${pu.price_positioning || ''}</p>
+        <p><strong>Brand archetype:</strong> ${mp.brand_archetype || ''}</p>
+      </div>
+      <div class="sc">
+        <h4>Target Audience</h4>
+        <p><strong>${ta.primary || ''}</strong></p>
+        <p style="margin-top:4px">${ta.age_range || ''} &nbsp;·&nbsp; ${ta.gender_skew || ''}</p>
+        <p style="margin-top:4px;font-size:12px;color:var(--text-s)">${ta.psychographics || ''}</p>
+      </div>
+      <div class="sc">
+        <h4>Pain Points</h4>
+        <div class="pain-chips">${painChips}</div>
+      </div>
+      <div class="sc">
+        <h4>Motivations</h4>
+        <div class="pain-chips">${motChips}</div>
+      </div>
+      <div class="sc">
+        <h4>Key Differentiators</h4>
+        <ul>${diffs}</ul>
+        ${mp.competitor_gaps ? `<p style="margin-top:8px;font-size:12px;color:var(--text-s)">Gap: ${mp.competitor_gaps}</p>` : ''}
+      </div>
+      <div class="sc">
+        <h4>Tone of Voice</h4>
+        <p>${s.tone_of_voice || ''}</p>
+      </div>
+      <div class="sc sc-full">
+        <h4>Marketing Funnel</h4>
+        <div class="funnel-steps">
+          ${mf.awareness ? `<div class="funnel-step"><span class="f-badge f-awareness">Awareness</span><span class="f-text">${mf.awareness}</span></div>` : ''}
+          ${mf.consideration ? `<div class="funnel-step"><span class="f-badge f-consideration">Consideration</span><span class="f-text">${mf.consideration}</span></div>` : ''}
+          ${mf.conversion ? `<div class="funnel-step"><span class="f-badge f-conversion">Conversion</span><span class="f-text">${mf.conversion}</span></div>` : ''}
+          ${mf.retention ? `<div class="funnel-step"><span class="f-badge f-retention">Retention</span><span class="f-text">${mf.retention}</span></div>` : ''}
+        </div>
+      </div>
+      <div class="sc">
+        <h4>Recommended Channels</h4>
+        <div class="ch-list">${channelRows}</div>
+      </div>
+      <div class="sc">
+        <h4>Budget Allocation</h4>
+        <div class="budget-bars">${budgetBars}</div>
+      </div>
+      <div class="sc sc-full">
+        <h4>Success KPIs</h4>
+        <div class="kpi-g">${kpiCards}</div>
+      </div>
+    </div>`;
+}
+
+document.getElementById('desc').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) generate();
+});
+</script>
+</body>
+</html>
